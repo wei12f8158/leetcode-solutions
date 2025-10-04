@@ -200,3 +200,68 @@ def bfs_graph(start):
                 visited.add(neighbor)
                 queue.append(neighbor)
 ```
+
+## 11. Sorting + Greedy
+**When to use**: Problems requiring optimal ordering with greedy selection
+**Examples**: H-Index, Meeting Rooms II, Non-overlapping Intervals
+
+```python
+def h_index(citations):
+    citations.sort(reverse=True)  # Sort in descending order
+    h = 0
+    
+    for i, citation in enumerate(citations, 1):  # 1-indexed
+        if citation >= i:
+            h = i
+        else:
+            break  # Early termination since sorted
+    
+    return h
+
+def meeting_rooms(intervals):
+    intervals.sort(key=lambda x: x[1])  # Sort by end time
+    count = 0
+    end_time = 0
+    
+    for start, end in intervals:
+        if start >= end_time:
+            count += 1
+            end_time = end
+    
+    return count
+```
+
+## 12. Greedy Reachability
+**When to use**: Problems about reaching a target with optimal/maximum moves
+**Examples**: Jump Game, Jump Game II, Gas Station
+
+```python
+def can_jump(nums):
+    max_reach = 0  # Furthest position we can reach
+    
+    for i in range(len(nums)):
+        if i > max_reach:
+            return False  # Can't reach current position
+        
+        max_reach = max(max_reach, i + nums[i])
+        
+        # Early termination if we can reach the end
+        if max_reach >= len(nums) - 1:
+            return True
+    
+    return True
+
+def jump_game_ii(nums):
+    jumps = 0
+    current_end = 0
+    farthest = 0
+    
+    for i in range(len(nums) - 1):
+        farthest = max(farthest, i + nums[i])
+        
+        if i == current_end:
+            jumps += 1
+            current_end = farthest
+    
+    return jumps
+```
